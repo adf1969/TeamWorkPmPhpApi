@@ -7,6 +7,8 @@ final class Rest
      * @var string api format request an response
      */
     private static $FORMAT = 'json';
+    
+    public static $RESPONSE_CLASS = 'json';
 
     /**
      * @var string this is the api key
@@ -91,9 +93,12 @@ final class Rest
         $headers['X-Action']  = $action;
         // for chrome use
         $headers['X-Authorization'] = 'BASIC '. base64_encode($this->key . ':xxx');
-        $response = '\TeamWorkPm\Response\\' . strtoupper(self::$FORMAT);
+        if (class_exists(self::$RESPONSE_CLASS) && is_subclass_of(self::$RESPONSE_CLASS, '\TeamWorkPm\Response\Model')) {
+          $response = self::$RESPONSE_CLASS;
+        } else {
+          $response = '\TeamWorkPm\Response\\' . strtoupper(self::$RESPONSE_CLASS);
+        }
         $response = new $response;
-
         return $response->parse($body, $headers);
     }
 

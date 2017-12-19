@@ -44,9 +44,9 @@ abstract class Model implements IteratorAggregate, Countable, ArrayAccess
 
     public function toArray()
     {
-        return $this->data;
+        return (array)$this->data;
     }
-
+    
     public function getHeaders()
     {
         return $this->headers;
@@ -87,8 +87,16 @@ abstract class Model implements IteratorAggregate, Countable, ArrayAccess
     }
 
     public function __get($name)
-    {
+    {        
+      if (is_object($this->data)) {
+        if (is_subclass_of($this->data, '\TeamWorkPm\Rest\Model')) {
+          return $this->data->$name;
+        } else {
+          return null;
+        }
+      } else {
         return isset($this->data[$name]) ? $this->data[$name] : null;
+      } 
     }
 
     public function __set($name, $value)

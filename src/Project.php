@@ -43,6 +43,7 @@ class Project extends Model
             ],
             'status'         => false
         ];
+        $this->action = 'projects';
     }
 
     /**
@@ -102,6 +103,24 @@ class Project extends Model
     public function getStarred()
     {
         return $this->rest->get("$this->action/starred");
+    }
+    
+    /**
+     * This will retrieve all of your projects, which are in a certain Category
+     * If you want to pass additional filters, you can pass those in the $params
+     * array which is a associative array of Querystring params which will be
+     * passed in the GET request.
+     * 
+     * eg.
+     *  array('status' => 'ACTIVE')
+     * 
+     * @param int $catId
+     * @param array $params
+     * @return type
+     */
+    public function getByCategory($catId, array $params = []) {
+      $params['catId'] = $catId;
+      return $this->rest->get("$this->action", $params);
     }
 
     /**

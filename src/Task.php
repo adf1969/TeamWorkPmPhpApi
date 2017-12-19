@@ -50,7 +50,7 @@ class Task extends Model
             'pending_file_attachments' => false
         ];
         $this->parent = 'todo-item';
-        $this->action = 'todo_items';
+        $this->action = 'tasks';
    }
 
     public function get($id, $get_time = false)
@@ -66,7 +66,20 @@ class Task extends Model
         return $this->rest->get("$this->action/$id", $params);
     }
 
-
+    /**
+     * Get all the Tasks across all projects
+     *  $params is an array of name/value pairs which will be passed
+     *    to the GET request as Query String arguments.
+     *    Possible values can be found here: 
+     *    https://developer.teamwork.com/todolistitems#retrieve_all_task
+     * 
+     * @param array $params
+     * @return type
+     */
+    public function getAll(array $params = []) {
+      return $this->rest->get("$this->action", $params);
+    }
+    
     /**
      * Retrieve all tasks on a task list
      *
